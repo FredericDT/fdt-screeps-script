@@ -5,7 +5,11 @@ var roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        if(creep.carry.energy < creep.carryCapacity) {
+        if(
+            (creep.carry.energy < creep.carryCapacity && creep.memory.state == 'harvest') || (creep.carry.energy == 0 && creep.memory.state == 'distribute')
+            // creep.carry.energy < creep.carryCapacity
+        ) {
+            creep.memory.state = 'harvest';
             // var sources = creep.room.find(FIND_SOURCES);
             // sources.sort((a, b) => {
                 // return Math.abs(creep.pos.x - a.pos.x) + Math.abs(creep.pos.y - a.pos.y) - Math.abs(creep.pos.x - b.pos.x) - Math.abs(creep.pos.y - b.pos.y)
@@ -19,15 +23,24 @@ var roleHarvester = {
             }
         }
         else {
+            creep.memory.state = 'distribute';
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN ||
-                        structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity;
+                    return (structure.structureType == STRUCTURE_EXTENSION
+                        || structure.structureType == STRUCTURE_SPAWN
+                        || structure.structureType == STRUCTURE_TOWER
+                        // || structure.structureType == STRUCTURE_CONTAINER
+                    ) && structure.energy < structure.energyCapacity;
                 }
             });
 
             targets.sort((a, b) => {
+                if (a.structureType == STRUCTURE_SPAWN && b.structureType != STRUCTURE_SPAWN) {
+                    return -1;
+                } else
+                if (a.structureType == STRUCTURE_TOWER && b.structureType != STRUCTURE_TOWER) {
+                    return -1;
+                }
                 return Math.abs(creep.pos.x - a.pos.x) + Math.abs(creep.pos.y - a.pos.y) - Math.abs(creep.pos.x - b.pos.x) - Math.abs(creep.pos.y - b.pos.y)
             });
 

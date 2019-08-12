@@ -1,38 +1,31 @@
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
+var roleClaimer = require('role.claimer');
 
 var structureTower = require('structure.tower');
 
 const guid = require('utils.guid');
+const creepUtils = require('creep.utils');
+require('prototype.spawn')();
 
-var harvester_size = 3;
+var harvester_size = 2;
 var upgrader_size = 2;
-var builder_size = 2;
+var builder_size = 1;
+
+var each_creep_cost_decrease_level = 2;
 
 module.exports.loop = function () {
-
-    // var tower = Game.getObjectById('50c1180dd188d8201f659093');
-    // if(tower) {
-    //     var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-    //         filter: (structure) => structure.hits < structure.hitsMax
-    //     });
-    //     if(closestDamagedStructure) {
-    //         tower.repair(closestDamagedStructure);
-    //     }
-    //
-    //     var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-    //     if(closestHostile) {
-    //         tower.attack(closestHostile);
-    //     }
-    // }
     var spawn = Game.spawns['Spawn1'];
 
     var harvesters = _.filter(Game.creeps, (creep) => {
         return creep.memory.role == 'harvester' || creep.memory.define_role == 'harvester';
     });
     if (harvesters.length < harvester_size) {
-        spawn.spawnCreep(roleHarvester.screep.module, 'Harvester' + guid.guid(), {
+        spawn.spawnCreep(
+            // roleHarvester.screep.module
+            creepUtils.getWorkCreepBodyByEnergy(spawn.sumSpawnEnergy() / each_creep_cost_decrease_level)
+            , 'Harvester' + guid.guid(), {
             memory: roleHarvester.screep.memory
         });
     }
@@ -48,7 +41,7 @@ module.exports.loop = function () {
         return creep.memory.role == 'upgrader' || creep.memory.define_role == 'upgrader';
     });
     if (upgraders.length < upgrader_size) {
-        spawn.spawnCreep(roleUpgrader.screep.module, 'Upgrader' + guid.guid(), {
+        spawn.spawnCreep(creepUtils.getWorkCreepBodyByEnergy(spawn.sumSpawnEnergy() / each_creep_cost_decrease_level), 'Upgrader' + guid.guid(), {
             memory: roleUpgrader.screep.memory
         });
     }
@@ -69,6 +62,9 @@ module.exports.loop = function () {
         } else
         if (creep.memory.role == 'harvester') {
             roleHarvester.run(creep);
+        } else
+        if (creep.memory.role == 'claimer') {
+            roleClaimer.run(creep);
         }
     }
 
@@ -79,13 +75,19 @@ module.exports.loop = function () {
             )
         );
     }
+
+    for (let i in Memory.creeps) {
+        if (Object.keys(Game.creeps).indexOf(i) >= 0) {
+
+        } else {
+            delete Memory.creeps[i];
+        }
+    }
 };
 
 module.exports.summonBuilder = function (spawn, id) {
-    var result = spawn.spawnCreep(roleBuilder.screep.module, 'Builder' + id, {
+    var result = spawn.spawnCreep(creepUtils.getWorkCreepBodyByEnergy(spawn.sumSpawnEnergy() / each_creep_cost_decrease_level), 'Builder' + id, {
         memory: roleBuilder.screep.memory
     });
-    // if (result != OK) {
-    //     console.log('Builder'+id+' result'+result);
-    // }
+    return result;
 };

@@ -13,7 +13,9 @@ module.exports = {
         }
     },
     towersId: [
-        '5fab52b1580c5b3'
+        '5fab52b1580c5b3',
+        '58de54692de16b7',
+
     ],
 
 };

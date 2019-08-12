@@ -21,7 +21,7 @@ var roleBuilder = {
             targets.sort((a, b) => {
                 return Math.abs(creep.pos.x - a.pos.x) + Math.abs(creep.pos.y - a.pos.y) - Math.abs(creep.pos.x - b.pos.x) - Math.abs(creep.pos.y - b.pos.y)
             });
-            // console.log(targets);
+
             if(targets.length) {
                 if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
@@ -54,7 +54,7 @@ var roleBuilder = {
 	hasWork(creep) {
     	if (creep.memory.define_role == 'builder') {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-            // console.log(targets);
+
             return targets.length > 0;
 		}
         return false;
