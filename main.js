@@ -4,6 +4,8 @@ var roleBuilder = require('role.builder');
 
 var structureTower = require('structure.tower');
 
+const guid = require('utils.guid');
+
 var harvester_size = 3;
 var upgrader_size = 2;
 var builder_size = 2;
@@ -30,7 +32,7 @@ module.exports.loop = function () {
         return creep.memory.role == 'harvester' || creep.memory.define_role == 'harvester';
     });
     if (harvesters.length < harvester_size) {
-        spawn.spawnCreep(roleHarvester.screep.module, 'Harvester' + (++harvesters.length), {
+        spawn.spawnCreep(roleHarvester.screep.module, 'Harvester' + guid.guid(), {
             memory: roleHarvester.screep.memory
         });
     }
@@ -39,14 +41,14 @@ module.exports.loop = function () {
         return creep.memory.role == 'builder' || creep.memory.define_role == 'builder';
     });
     if (builders.length < builder_size) {
-        this.summonBuilder(spawn,(++builders.length));
+        this.summonBuilder(spawn,guid.guid());
     }
 
     var upgraders = _.filter(Game.creeps, (creep) => {
         return creep.memory.role == 'upgrader' || creep.memory.define_role == 'upgrader';
     });
     if (upgraders.length < upgrader_size) {
-        spawn.spawnCreep(roleUpgrader.screep.module, 'Upgrader' + (++upgraders.length), {
+        spawn.spawnCreep(roleUpgrader.screep.module, 'Upgrader' + guid.guid(), {
             memory: roleUpgrader.screep.memory
         });
     }
