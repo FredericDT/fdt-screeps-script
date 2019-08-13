@@ -33,7 +33,7 @@ module.exports = {
     },
     closetNotFullSource(creep) {
         var sources = creep.room.find(FIND_SOURCES);
-        sources.filter((o) => {
+        sources = sources.filter((o) => {
             return o.energy > 0;
         });
         sources.sort((a, b) => {

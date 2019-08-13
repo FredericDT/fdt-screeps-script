@@ -9,9 +9,9 @@ const guid = require('utils.guid');
 const creepUtils = require('creep.utils');
 require('prototype.spawn')();
 
-var harvester_size = 3;
-var upgrader_size = 3;
-var builder_size = 4;
+var harvester_size = 8;
+var upgrader_size = 0;
+var builder_size = 1;
 
 var each_creep_cost_decrease_level = 1;
 
