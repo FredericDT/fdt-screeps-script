@@ -16,5 +16,13 @@ module.exports = function(){
         return this.spawnCreep(roleClaimer.screep.module, 'claimer', {memory:
             roleClaimer.screep.memory
         });
+    };
+    StructureSpawn.prototype.findTowers = function () {
+        var targets = this.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType == STRUCTURE_TOWER;
+            }
+        });
+        return targets;
     }
 };
