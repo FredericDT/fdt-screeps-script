@@ -8,9 +8,10 @@ var structureTower = require('structure.tower');
 const guid = require('utils.guid');
 const creepUtils = require('creep.utils');
 require('prototype.spawn')();
+require('prototype.creep')();
 
-var harvester_size = 8;
-var upgrader_size = 0;
+var harvester_size = 7;
+var upgrader_size = 1;
 var builder_size = 1;
 
 var each_creep_cost_decrease_level = 1;
